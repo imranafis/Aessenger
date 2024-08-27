@@ -5,6 +5,7 @@ import { auth } from "./lib/firebase.js";
 import { createHashRouter, RouterProvider, Navigate } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
+import Notification from "./components/notification/Notification.jsx";
 
 const App = () => {
   const { currentUser, isLoading, fetchUserInfo } = useUserStore();
@@ -42,6 +43,7 @@ const App = () => {
   return (
     <div className="container">
       <RouterProvider router={router} />;
+      <Notification />
     </div>
   );
 };

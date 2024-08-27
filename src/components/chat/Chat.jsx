@@ -59,6 +59,7 @@ const Chat = () => {
     }
   };
   const handleSend = async () => {
+    setText("");
     if (text === "" && !img.file) {
       return;
     }
@@ -118,10 +119,21 @@ const Chat = () => {
     <div className="chat">
       <div className="top">
         <div className="user">
-          <img src={user.avatar || "./avatar.png"} alt="" />
+          <img
+            src={
+              isCurrentUsserBlocked || isReceiverBlocked
+                ? "./avatar.png"
+                : user.avatar || "./avatar.png"
+            }
+            alt=""
+          />
 
           <div className="texts">
-            <span>{user.username}</span>
+            <span>
+              {isCurrentUsserBlocked || isReceiverBlocked
+                ? "User"
+                : user.username}
+            </span>
             {/* <p>Random some texts for texting the chat</p> */}
           </div>
         </div>

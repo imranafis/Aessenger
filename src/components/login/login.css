@@ -110,16 +110,12 @@ h4 {
 
 .intro {
   text-align: center;
-  margin-bottom: 3rem;
-}
-
-.intro i {
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 .intro .text {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: bold;
 }
 
@@ -127,9 +123,13 @@ h4 {
   display: flex;
   font-size: 1.25rem;
   font-weight: 600;
-  padding: 10px 138px;
+  padding: 10px 30px;
+
+  /* padding: 10px 80px; */
   border-radius: 10px;
-  width: 30rem;
+  min-width: 35svw;
+  max-width: 80svw;
+  /* width: 80%; */
   outline: none;
   border: none;
   /* margin-top: 1rem; */
@@ -141,9 +141,9 @@ h4 {
   align-items: center;
   text-align: center;
   justify-content: center;
-  background-color: var(--formBtn);
+  background-color: var(--primary);
   box-shadow: var(--shadow);
-  opacity: 0.5;
+  opacity: 0.65;
 }
 .formBtn:hover {
   opacity: 1;
@@ -163,7 +163,11 @@ h4 {
 }
 
 .form {
-  display: block;
+  display: flex;
+  /* align-items: center; */
+  flex-direction: column;
+  min-width: 35svw;
+  max-width: 80svw;
   margin-top: 1rem;
   margin-bottom: 2rem;
   border-radius: 10px;
@@ -201,7 +205,7 @@ label {
   outline: none;
   /* border: 1px solid #dddddd; */
   padding: 12px 20px;
-  width: 25rem;
+  width: 100%;
   border-radius: 20px;
   background: #f0f0f0;
   box-shadow: var(--shadow);
@@ -209,7 +213,7 @@ label {
 .input-form input {
   font-size: 1rem;
   font-weight: 600;
-  width: 20rem;
+  width: 100%;
 }
 .input-form span i {
   font-size: 1.25rem;
@@ -232,48 +236,24 @@ label {
   cursor: pointer;
   align-items: center;
   justify-content: center;
-  background-color: var(--btn);
+  background-color: var(--primary);
   box-shadow: var(--shadow);
-  opacity: 0.5;
+  opacity: 0.45;
 }
 
 #goBtn:hover {
-  opacity: 1;
-}
-
-#googleSignIn {
-  display: flex;
-  font-size: 1.25rem;
-  font-weight: 600;
-  padding: 10px 110px;
-  border-radius: 10px;
-  outline: none;
-  border: none;
-  /* margin-top: 1rem; */
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-  margin-top: 1rem;
-  color: #fff;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--formBtn);
-  box-shadow: var(--shadow);
-  opacity: 0.5;
-}
-#googleSignIn span {
-  margin-right: 0.5rem;
-}
-
-#googleSignIn:hover {
-  opacity: 1;
+  opacity: 0.85;
 }
 
 .error {
   display: flex;
+  align-items: center;
   justify-content: center;
+  text-align: center;
   font-size: 1rem;
   font-weight: 600;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
   margin-top: 0.75rem;
   margin-bottom: 0.75rem;
   color: red;
@@ -287,7 +267,7 @@ label {
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: var(--textBtn);
+  color: var(--primary);
   cursor: pointer;
   opacity: 0.5;
 }

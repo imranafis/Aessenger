@@ -15,6 +15,7 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 import upload from "../lib/upload";
 import { useUserStore } from "../lib/userStore";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const { fetchUserInfo } = useUserStore();
@@ -49,6 +50,7 @@ const Login = () => {
       const docSnap = await getDoc(doc(db, "users", user.uid));
 
       if (!docSnap.exists()) {
+        toast.success("Account Creating");
         const displayName = user.displayName || "";
         const photoURL = user.photoURL || "";
 
@@ -148,10 +150,10 @@ const Login = () => {
     <>
       <div className="auth-panel">
         <div className="intro">
-          <div className="logo">
+          {/* <div className="logo">
             <i className="fa-brands fa-nfc-symbol"></i>
-          </div>
-          <p className="text">You deserve it!</p>
+          </div> */}
+          <p className="text">Welcome Procrastinator!</p>
         </div>
         <div className="formBtn" onClick={handleGoogleSignIn}>
           Login with Gmail
