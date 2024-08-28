@@ -29,7 +29,12 @@ const AddUser = ({ setAddMode }) => {
 
       const userList = querySnapShot.docs
         .map((doc) => doc.data())
-        .filter((user) => user.username.toLowerCase().includes(searchTerm));
+        .filter((user) => {
+          if (currentUser.id !== user.id) {
+            return user.username.toLowerCase().includes(searchTerm);
+          }
+          return false;
+        });
 
       if (userList.length > 0) {
         setUsers(userList);
