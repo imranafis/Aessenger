@@ -54,7 +54,7 @@
           width: 300px;
           bottom: 50px;
           left: 50%;
-          transform: translateX(-50%) translateY(0); /* Ensure the element is centered horizontally */
+          transform: translateX(-50%) translateY(0);
         }
       }
 
