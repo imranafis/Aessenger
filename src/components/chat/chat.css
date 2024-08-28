@@ -147,7 +147,7 @@
       color: white;
       padding: 15px;
       border-radius: 10px;
-      min-width: 6rem;
+      min-width: 7rem;
       max-width: auto;
       font-size: 16px;
       &:disabled {
