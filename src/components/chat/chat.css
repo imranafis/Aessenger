@@ -1,7 +1,6 @@
 @media (max-width: 768px) {
   .chat {
     background-color: rgba(17, 25, 40, 0.75);
-    width: 90svw;
   }
 }
 
@@ -148,7 +147,7 @@
       color: white;
       padding: 15px;
       border-radius: 10px;
-      min-width: 9.5rem;
+      min-width: 6rem;
       max-width: auto;
       font-size: 16px;
       &:disabled {
