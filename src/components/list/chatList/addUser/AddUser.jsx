@@ -4,11 +4,9 @@ import {
   doc,
   getDoc,
   getDocs,
-  query,
   serverTimestamp,
   setDoc,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import "./addUser.css";
 import { db } from "../../../../lib/firebase";
@@ -16,7 +14,7 @@ import { useState } from "react";
 import { useUserStore } from "../../../../lib/userStore";
 import { toast } from "react-toastify";
 
-const AddUser = () => {
+const AddUser = ({ setAddMode }) => {
   const [users, setUsers] = useState([]);
   const { currentUser } = useUserStore();
 
@@ -29,7 +27,6 @@ const AddUser = () => {
       const userRef = collection(db, "users");
       const querySnapShot = await getDocs(userRef);
 
-      // Filter users on the client side for a case-insensitive partial match
       const userList = querySnapShot.docs
         .map((doc) => doc.data())
         .filter((user) => user.username.toLowerCase().includes(searchTerm));
@@ -45,52 +42,55 @@ const AddUser = () => {
       toast.error("Failed to search users. Please try again.");
     }
   };
+
   const handleAdd = async (e, user) => {
     e.preventDefault();
     const chatRef = collection(db, "chats");
     const userChatsRef = collection(db, "userChats");
 
-    // Combine the user IDs to create a custom ID for the chat document
     const combinedId = `${user.id}_${currentUser.id}`;
 
     try {
-      // Check if a chat with the combinedId already exists
       const existingChatDoc = await getDoc(doc(chatRef, combinedId));
 
       if (existingChatDoc.exists()) {
         toast.warning("User already exists!");
+        setAddMode(false);
         console.log("Chat already exists, not creating a new one.");
-        return; // Exit the function if the chat already exists
+        return;
+      } else {
+        const newChatRef = doc(chatRef, combinedId);
+
+        toast.success("Adding user!");
+
+        await setDoc(newChatRef, {
+          createdAt: serverTimestamp(),
+          messages: [],
+        });
+
+        await updateDoc(doc(userChatsRef, user.id), {
+          chats: arrayUnion({
+            chatId: newChatRef.id,
+            lastMessage: `${currentUser.username} added you in the chat`,
+            receiverId: currentUser.id,
+            updatedAt: Date.now(),
+          }),
+        });
+
+        await updateDoc(doc(userChatsRef, currentUser.id), {
+          chats: arrayUnion({
+            chatId: newChatRef.id,
+            lastMessage: `${user.username} added in the chat`,
+            receiverId: user.id,
+            updatedAt: Date.now(),
+          }),
+        });
+
+        toast.success("User added successfully!");
+
+        // Close the AddUser component after successfully adding a user
+        setAddMode(false);
       }
-
-      // Create a new chat document with the custom combined ID
-      const newChatRef = doc(chatRef, combinedId); // Use the combined ID here
-
-      toast.success("Adding user!");
-
-      await setDoc(newChatRef, {
-        createdAt: serverTimestamp(),
-        messages: [],
-      });
-
-      await updateDoc(doc(userChatsRef, user.id), {
-        chats: arrayUnion({
-          chatId: newChatRef.id,
-          lastMessage: `${currentUser.username} added you in the chat`,
-          receiverId: currentUser.id,
-          updatedAt: Date.now(),
-        }),
-      });
-
-      await updateDoc(doc(userChatsRef, currentUser.id), {
-        chats: arrayUnion({
-          chatId: newChatRef.id,
-          lastMessage: `${user.username} added in the chat`,
-          receiverId: user.id,
-          updatedAt: Date.now(),
-        }),
-      });
-      toast.success("User added successfully!");
     } catch (err) {
       toast.error("Failed to add user. Please try again.");
       console.log(err);
