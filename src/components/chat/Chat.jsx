@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import EmojiPicker from "emoji-picker-react";
 import "./chat.css";
+import { format } from "timeago.js";
 
 import {
   arrayUnion,
@@ -13,6 +14,7 @@ import { db } from "../../lib/firebase";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import upload from "../../lib/upload";
+import { toast } from "react-toastify";
 
 const Chat = () => {
   const [chat, setChat] = useState();
@@ -23,6 +25,17 @@ const Chat = () => {
     url: "",
   });
   const textField = useRef(null);
+
+  const [timeUpdate, setTimeUpdate] = useState(0);
+
+  // Real-time update of the timeago format every minute
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeUpdate((prev) => prev + 1); // Increment state to trigger re-render
+    }, 60000); // Update every minute
+
+    return () => clearInterval(interval); // Clean up the interval on component unmount
+  }, []);
 
   const { currentUser } = useUserStore();
   const { chatId, user, isCurrentUsserBlocked, isReceiverBlocked } =
@@ -44,6 +57,14 @@ const Chat = () => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat?.messages]);
 
+  // Handle image change
+  useEffect(() => {
+    if (img.file) {
+      handleSend(); // Trigger send when image is set
+      endRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [img]); // Dependency on `img`
+
   const handleEmoji = (e) => {
     setText((prev) => prev + e.emoji);
     setOpen(false);
@@ -56,10 +77,19 @@ const Chat = () => {
         file: e.target.files[0],
         url: URL.createObjectURL(e.target.files[0]),
       });
+
+      toast.success("Image sending!");
     }
   };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSend();
+      console.log(e.key);
+    }
+  };
+
   const handleSend = async () => {
-    setText("");
     if (text === "" && !img.file) {
       return;
     }
@@ -90,10 +120,14 @@ const Chat = () => {
           const userChatsData = userChatSnapshot.data();
 
           const chatIndex = userChatsData.chats.findIndex(
-            (c) => c.chatId == chatId
+            (c) => c.chatId === chatId
           );
 
-          userChatsData.chats[chatIndex].lastMessage = text;
+          if (imgUrl) {
+            userChatsData.chats[chatIndex].lastMessage = "Sent a photo";
+          } else {
+            userChatsData.chats[chatIndex].lastMessage = text;
+          }
           userChatsData.chats[chatIndex].isSeen =
             id === currentUser.id ? true : false;
           userChatsData.chats[chatIndex].updatedAt = Date.now();
@@ -134,12 +168,9 @@ const Chat = () => {
                 ? "User"
                 : user.username}
             </span>
-            {/* <p>Random some texts for texting the chat</p> */}
           </div>
         </div>
         <div className="icons">
-          {/* <img src="./phone.png" alt="" />
-          <img src="./video.png" alt="" /> */}
           <img src="./info.png" alt="" />
         </div>
       </div>
@@ -158,18 +189,10 @@ const Chat = () => {
             <div className="texts">
               {message.img && <img src={message.img} alt="" />}
               {message.text !== "" && <p>{message.text}</p>}
-              {/* <span>{format(message.createdAt.toDate())}</span> */}
+              <span>{format(message.createdAt.toDate())}</span>
             </div>
           </div>
         ))}
-        {/* {img.url && (
-          <div className="message Own">
-            <div className="texts">
-              <img src={img.url} alt="" />
-            </div>
-          </div>
-        )} */}
-
         <div ref={endRef}></div>
       </div>
       <div className="bottom">
@@ -183,8 +206,6 @@ const Chat = () => {
             style={{ display: "none" }}
             onChange={handleImg}
           />
-          {/* <img src="./camera.png" alt="" />
-          <img src="./mic.png" alt="" /> */}
         </div>
         <input
           type="text"
@@ -195,6 +216,7 @@ const Chat = () => {
           }
           value={text}
           ref={textField}
+          onKeyDown={handleKeyDown}
           onChange={(e) => setText(e.target.value)}
           disabled={isCurrentUsserBlocked || isReceiverBlocked}
         />

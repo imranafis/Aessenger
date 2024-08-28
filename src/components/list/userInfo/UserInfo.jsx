@@ -1,4 +1,5 @@
 // import React from 'react'
+import { auth } from "../../../lib/firebase";
 import { useUserStore } from "../../../lib/userStore";
 import "./userInfo.css";
 
@@ -14,7 +15,7 @@ const UserInfo = () => {
       <div className="icons">
         {/* <img src="./more.png" alt="" />
         <img src="./video.png" alt="" /> */}
-        <img src="./edit.png" alt="" />
+        <img src="./logout.png" alt="" onClick={() => auth.signOut()} />
       </div>
     </div>
   );

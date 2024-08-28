@@ -49,15 +49,27 @@ body {
 
 .container {
   display: flex;
+  flex-direction: row;
   min-height: 90svh;
   max-height: 90svh;
   min-width: 90svw;
   max-width: 90svw;
-  overflow: auto;
+  overflow-y: hidden;
+  overflow-x: hidden;
   background-color: rgba(17, 25, 40, 0.75);
   border-radius: 12px;
   backdrop-filter: blur(5px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .loading {
@@ -157,3 +169,26 @@ body {
 .chat {
   flex: 2;
 } */
+
+html {
+  scroll-behavior: smooth; /* Enables smooth scrolling */
+}
+
+/* Custom scrollbar styles for WebKit browsers */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0; /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded corners of the thumb */
+  border: 2px solid #f0f0f0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Darker color on hover */
+}

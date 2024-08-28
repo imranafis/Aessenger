@@ -17,8 +17,8 @@ import { useUserStore } from "../../../../lib/userStore";
 import { toast } from "react-toastify";
 
 const AddUser = () => {
-  const { currentUser } = useUserStore();
   const [users, setUsers] = useState([]);
+  const { currentUser } = useUserStore();
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -45,81 +45,55 @@ const AddUser = () => {
       toast.error("Failed to search users. Please try again.");
     }
   };
-  const handleAdd = async (e) => {
+  const handleAdd = async (e, user) => {
     e.preventDefault();
     const chatRef = collection(db, "chats");
-    const userChatRef = collection(db, "userChats");
+    const userChatsRef = collection(db, "userChats");
 
-    // Create a unique chat ID based on user IDs (e.g., combining them)
-    const combinedUserId = [currentUser.id, user.id].sort().join("_");
+    // Combine the user IDs to create a custom ID for the chat document
+    const combinedId = `${user.id}_${currentUser.id}`;
 
     try {
-      // Check if the chat already exists
-      const chatDocRef = doc(chatRef, combinedUserId);
-      const chatDocSnap = await getDoc(chatDocRef);
+      // Check if a chat with the combinedId already exists
+      const existingChatDoc = await getDoc(doc(chatRef, combinedId));
 
-      if (chatDocSnap.exists()) {
-        toast.warn("User already added");
-        return; // Exit if chat already exists
+      if (existingChatDoc.exists()) {
+        toast.warning("User already exists!");
+        console.log("Chat already exists, not creating a new one.");
+        return; // Exit the function if the chat already exists
       }
 
-      // If chat doesn't exist, create a new chat document
-      await setDoc(chatDocRef, {
+      // Create a new chat document with the custom combined ID
+      const newChatRef = doc(chatRef, combinedId); // Use the combined ID here
+
+      toast.success("Adding user!");
+
+      await setDoc(newChatRef, {
         createdAt: serverTimestamp(),
         messages: [],
       });
 
-      // Reference to user chat documents
-      const userChatDocRef = doc(userChatRef, user.id);
-      const currentUserChatDocRef = doc(userChatRef, currentUser.id);
-
-      // Get documents to check if they exist
-      const userChatSnap = await getDoc(userChatDocRef);
-      const currentUserChatSnap = await getDoc(currentUserChatDocRef);
-
-      // If the document for the user doesn't exist, create it with initial data
-      if (!userChatSnap.exists()) {
-        await setDoc(userChatDocRef, {
-          chats: [],
-        });
-      }
-
-      if (!currentUserChatSnap.exists()) {
-        await setDoc(currentUserChatDocRef, {
-          chats: [],
-        });
-      }
-
-      // Create chat data to be added
-      const chatData = {
-        chatId: combinedUserId,
-        lastMessage: "New user added, Say Hi!",
-        receiverId: user.id,
-        updatedAt: Date.now(), // Temporarily use Date.now()
-      };
-
-      // Update both user chat documents with the new chat info (excluding serverTimestamp for now)
-      await updateDoc(userChatDocRef, {
-        chats: arrayUnion(chatData),
+      await updateDoc(doc(userChatsRef, user.id), {
+        chats: arrayUnion({
+          chatId: newChatRef.id,
+          lastMessage: `${currentUser.username} added you in the chat`,
+          receiverId: currentUser.id,
+          updatedAt: Date.now(),
+        }),
       });
 
-      await updateDoc(currentUserChatDocRef, {
-        chats: arrayUnion({ ...chatData, receiverId: currentUser.id }),
+      await updateDoc(doc(userChatsRef, currentUser.id), {
+        chats: arrayUnion({
+          chatId: newChatRef.id,
+          lastMessage: `${user.username} added in the chat`,
+          receiverId: user.id,
+          updatedAt: Date.now(),
+        }),
       });
-
-      // Now update the `updatedAt` field with `serverTimestamp()`
-      await updateDoc(userChatDocRef, {
-        "chats.updatedAt": serverTimestamp(),
-      });
-
-      await updateDoc(currentUserChatDocRef, {
-        "chats.updatedAt": serverTimestamp(),
-      });
-
       toast.success("User added successfully!");
-    } catch (error) {
-      console.error("Error adding user: ", error);
+    } catch (err) {
       toast.error("Failed to add user. Please try again.");
+      console.log(err);
     }
   };
 
@@ -141,7 +115,7 @@ const AddUser = () => {
               <img src={user.avatar || "./avatar.png"} alt="" />
               <span>{user.username}</span>
             </div>
-            <button onClick={() => handleAdd(user)}>Add User</button>
+            <button onClick={(e) => handleAdd(e, user)}>Add User</button>
           </div>
         ))}
     </div>

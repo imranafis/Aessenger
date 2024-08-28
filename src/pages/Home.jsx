@@ -1,7 +1,7 @@
 // import React from 'react'
+import Chat from "../components/Chat/Chat.jsx";
 import List from "../components/list/List.jsx";
-import Chat from "../components/chat/Chat.jsx";
-import Detail from "../components/detail/Detail.jsx";
+// import Detail from "../components/detail/Detail.jsx";
 import { useChatStore } from "../lib/chatStore.js";
 
 const Home = () => {
@@ -10,7 +10,7 @@ const Home = () => {
     <>
       <List />
       {chatId && <Chat />}
-      {chatId && <Detail />}
+      {/* {chatId && <Detail />} */}
     </>
   );
 };

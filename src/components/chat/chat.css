@@ -1,3 +1,9 @@
+@media (max-width: 768px) {
+  .chat {
+    background-color: rgba(17, 25, 40, 0.75);
+  }
+}
+
 .chat {
   flex: 2;
   display: flex;
@@ -57,8 +63,8 @@
   .center {
     padding: 20px;
     flex: 1;
-    min-height: 30rem;
-    max-height: 30rem;
+    min-height: 64svh;
+    max-height: 65svh;
     overflow-y: auto;
     scroll-behavior: smooth;
     display: flex;
@@ -95,7 +101,7 @@
 
         img {
           width: 100%;
-          height: auto;
+          height: 300px;
           border-radius: 10px;
           object-fit: cover;
         }

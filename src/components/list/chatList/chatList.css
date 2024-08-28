@@ -1,6 +1,13 @@
+@media (max-width: 768px) {
+  .chatList {
+    height: 150svh;
+  }
+}
+
 .chatList {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
 
   .search {
     display: flex;

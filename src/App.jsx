@@ -42,7 +42,7 @@ const App = () => {
 
   return (
     <div className="container">
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
       <Notification />
     </div>
   );
