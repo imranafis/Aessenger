@@ -1,8 +1,8 @@
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .userInfo {
     height: 10svh;
   }
-}
+} */
 
 .userInfo {
   display: flex;

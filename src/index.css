@@ -1,3 +1,4 @@
+/* Base styles */
 :root {
   --primary: rgb(247, 119, 84);
   --small: rgb(255, 188, 128);
@@ -47,6 +48,7 @@ body {
   color: white;
 }
 
+/* Styles for large screens */
 .container {
   display: flex;
   flex-direction: row;
@@ -62,113 +64,34 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.125);
 }
 
+/* Media query for smaller screens */
 @media (max-width: 768px) {
   .container {
-    flex-direction: column;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: row;
+    min-height: 90svh;
+    max-height: 90svh;
+    min-width: 90svw;
+    max-width: 90svw;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    background-color: rgba(17, 25, 40, 0.75);
+    border-radius: 12px;
+    backdrop-filter: blur(5px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.125);
   }
   ::-webkit-scrollbar {
     display: none;
   }
 }
 
+/* Additional styles */
 .loading {
   padding: 50px;
   font-size: 36px;
   border-radius: 10px;
   background-color: rgba(17, 25, 40, 0.9);
 }
-
-/* .formContainer {
-  display: flex;
-  flex-direction: column;
-  background-color: burlywood;
-  height: 100vh;
-  gap: 3rem;
-  align-items: center;
-  justify-content: center;
-}
-
-.formBtn {
-  display: flex;
-  font-size: 1.25rem;
-  font-weight: 600;
-  padding: 10px 138px;
-  border-radius: 10px;
-  outline: none;
-  border: none;
-  margin-top: 1rem;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-  margin-bottom: 1rem;
-  color: #fff;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--dark);
-  box-shadow: var(--shadow);
-  opacity: 0.5;
-}
-.formBtn:hover {
-  opacity: 1;
-} */
-
-/* 
-.container {
-  display: flex;
-  border: 1px solid white;
-  border-radius: 10px;
-  width: 65%;
-  height: 80%;
-  overflow: hidden;
-} */
-
-/* .sidebar {
-  flex: 1;
-  background-color: #3e3c61;
-
-  .navbar {
-    display: flex;
-    align-items: center;
-    background-color: #2f2b52;
-    height: 50px;
-    padding: 10px;
-    justify-content: space-between;
-    color: #ddddf7;
-
-    .logo {
-      font-weight: bold;
-    }
-
-    .user {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      img {
-        background-color: #ddddf7;
-        height: 30px;
-        width: 30px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-
-      button {
-        background-color: #5d5b8b;
-        color: #ddddf7;
-        font-size: 10px;
-        padding: 3px 4px;
-        border-radius: 10px;
-        border: none;
-        cursor: pointer;
-      }
-    }
-  }
-}
-
-.chat {
-  flex: 2;
-} */
 
 html {
   scroll-behavior: smooth; /* Enables smooth scrolling */

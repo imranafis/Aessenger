@@ -28,6 +28,11 @@ const Chat = () => {
 
   const [timeUpdate, setTimeUpdate] = useState(0);
 
+  const { currentUser } = useUserStore();
+  const { chatId, resetChat, user, isCurrentUsserBlocked, isReceiverBlocked } =
+    useChatStore();
+
+  const endRef = useRef(null);
   // Real-time update of the timeago format every minute
   useEffect(() => {
     const interval = setInterval(() => {
@@ -36,12 +41,6 @@ const Chat = () => {
 
     return () => clearInterval(interval); // Clean up the interval on component unmount
   }, []);
-
-  const { currentUser } = useUserStore();
-  const { chatId, user, isCurrentUsserBlocked, isReceiverBlocked } =
-    useChatStore();
-
-  const endRef = useRef(null);
 
   useEffect(() => {
     const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
@@ -64,6 +63,10 @@ const Chat = () => {
       endRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [img]); // Dependency on `img`
+
+  const handleBack = () => {
+    resetChat();
+  };
 
   const handleEmoji = (e) => {
     setText((prev) => prev + e.emoji);
@@ -153,6 +156,12 @@ const Chat = () => {
     <div className="chat">
       <div className="top">
         <div className="user">
+          <img
+            src="./arrowLeft.png"
+            alt=""
+            className="back"
+            onClick={handleBack}
+          />
           <img
             src={
               isCurrentUsserBlocked || isReceiverBlocked
