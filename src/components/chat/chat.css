@@ -51,12 +51,10 @@
 
         .picker {
           position: absolute;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          bottom: 50px; /* Adjust as needed */
-          left: 70%;
-          transform: translateX(-70%);
+          width: 300px;
+          bottom: 50px;
+          left: 50%;
+          transform: translateX(-50%) translateY(0); /* Ensure the element is centered horizontally */
         }
       }
 
