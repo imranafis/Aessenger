@@ -1,6 +1,7 @@
 @media (max-width: 768px) {
   .chat {
     background-color: rgba(17, 25, 40, 0.75);
+    width: 90svw;
   }
 }
 
@@ -147,6 +148,8 @@
       color: white;
       padding: 15px;
       border-radius: 10px;
+      min-width: 9.5rem;
+      max-width: auto;
       font-size: 16px;
       &:disabled {
         cursor: not-allowed;
@@ -163,8 +166,12 @@
 
       .picker {
         position: absolute;
-        bottom: 50px;
-        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        bottom: 50px; /* Adjust as needed */
+        left: 70%;
+        transform: translateX(-70%);
       }
     }
 
